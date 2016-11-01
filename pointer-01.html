@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Round 1 - WC3 Pointer Events</title>
+  <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
+  <link rel="stylesheet" href="pointer-style.css">
+	<script type="text/javascript" src="pointer.min.js"></script>
+	<script type="text/javascript" src="vue.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Strategies for Extending Vue</h1>
+    <h2>Round 1: Using the Component's <code>mounted</code> Hook</h2>
+    <nav>
+      <ol>
+        <li><a href="pointer-01.html">Round 1</a></li>
+        <li><a href="pointer-02.html">Round 2</a></li>
+        <li><a href="pointer-03.html">Round 3</a></li>
+        <li><a href="pointer-04.html">Round 4</a></li>
+        <li><a href="pointer-05.html">Round 5</a></li>
+        <li><a href="https://benjaminlistwon.com/strategies-for-extending-vue/">Read the article</a></li>
+      </ol>
+    </nav>
+  </header>
+
+	<div id="app">
+	  <test-canvas></test-canvas>
+	</div>
+</body>
+
+<script>
+Vue.component('test-canvas', {
+	template: `<div>
+							<div class="event-source" id="eventSource" @pointermove="handlePointerMove">
+								<p>Click and drag in here.</p>
+							</div>
+							<div class="event-log">
+								<ul>
+									<li v-for="event in eventLog">{{ event }}</li>
+								</ul>
+							</div>
+						</div>`,
+
+	data: function() {
+		return {
+			pointerInstance: null,
+			canvasInstance: null,
+			eventLog: []
+		}
+	},
+
+	mounted: function() {
+		this.canvasInstance = document.querySelector("#eventSource")
+		this.pointerInstance = new PointerTracker(this.canvasInstance)
+	},
+
+	methods: {
+		handlePointerMove: function (ev) {
+			this.eventLog.push(ev);
+		}
+	}
+});
+
+new Vue({
+  el: '#app'
+})
+
+</script>
+
+</html>

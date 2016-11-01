@@ -1,0 +1,61 @@
+/* General stuff for the page layout */
+body {
+  font-family: 'Muli', helvetica, sans-serif;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+.col {
+  padding: 0 1rem;
+  flex: 1 1 auto;
+}
+
+/* For the header */
+body > header {
+  text-align: center;
+  padding-bottom: 2rem;
+}
+body > header h1,
+body > header h2 {
+  margin: 0.25rem 0;
+}
+body > header ol {
+  list-style: none;
+}
+body > header ol li {
+  display: inline-block;
+  padding: 0 0.5rem;
+  border-right: 1px dotted #ccc;
+}
+body > header ol li:last-child {
+  border-right: none;
+}
+
+/* For the event capture box, and the log */
+.event-source,
+.event-log {
+  width: 100%;
+  height: 300px;
+  border: 1px solid #000;
+  margin-bottom: 10px;
+}
+.event-source {
+  display: table;
+}
+.event-source p {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+.event-log {
+  overflow: auto;
+  font-family: monospace;
+}
+.event-log ul {
+  list-style: none;
+  margin: 10px;
+  padding: 0;
+}
