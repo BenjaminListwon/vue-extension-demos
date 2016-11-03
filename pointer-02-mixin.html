@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Demo 2 - Using a Mixin - Strategies for Extending Vue</title>
+
+  <!-- A webfont to make the app a little prettier -->
+  <link href="https://fonts.googleapis.com/css?family=Muli:300,400" rel="stylesheet">
+  
+  <!-- An external stylesheet -->
+  <link rel="stylesheet" href="pointer-style.css">
+
+  <!-- A local copy of the PointerTracker code
+       See: https://github.com/Rapid-Application-Development-JS/Pointer -->
+  <script type="text/javascript" src="pointer.min.js"></script>
+
+  <!-- A local copy of Vue (2.0.3)
+       See: https://github.com/vuejs/vue -->
+  <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<!--
+  The body of our app is pretty unremarkable. In the first few
+  examples our app will insert a single instance of our component,
+  and in the latter examples it will insert two, side-by-side. The
+  header is just a binch of links to get around our example pages.
+-->
+<body>
+  <header>
+    <h1>Strategies for Extending Vue</h1>
+    <h2>Demo 2: Using a Mixin</h2>
+    <nav>
+      <ol>
+        <li><a href="pointer-01-basic.html">Basic</a></li>
+        <li><a href="pointer-02-mixin.html">Mixin</a></li>
+        <li><a href="pointer-03-extension.html">Extend</a></li>
+        <li><a href="pointer-04-plugin.html">Plugin</a></li>
+        <li><a href="pointer-05-bonus.html">Bonus Demo</a></li>
+        <li><a href="https://benjaminlistwon.com/strategies-for-extending-vue/">Read the article</a></li>
+      </ol>
+    </nav>
+  </header>
+  <div id="app" class="row">
+    <div class="col">
+      <pointer-demo></pointer-demo>
+    </div>
+    <div class="col">
+      <pointer-demo></pointer-demo>
+    </div>
+  </div>
+</body>
+
+
+<!--
+
+  These are our templates
+
+-->
+<!-- This template represents an instance of a source and log -->
+<script type="text/x-template" id="pointer-demo-template">
+  <div>
+    <pointer-canvas></pointer-canvas>
+    <pointer-log></pointer-log>
+  </div>
+</script>
+
+<!-- This template is where our events come from -->
+<script type="text/x-template" id="pointer-canvas-template">
+    <div class="event-source" @pointermove="handlePointerMove">
+      <p>Click and drag in here.</p>
+    </div>
+</script>
+
+<!-- This template is where our events get logged -->
+<script type="text/x-template" id="pointer-log-template">
+  <div class="event-log">
+    <ul>
+      <li v-for="event in eventLog">{{ event }}</li>
+    </ul>
+  </div>
+</script>
+
+
+
+<!--
+
+  These are our components
+
+-->
+<script>
+// CHANGE 
+// Define our mixin
+var pointerEventMixin = {
+  // When the DIV gets added to the DOM, start tracking events
+  mounted: function() {
+    this.pointerInstance = new PointerTracker(this.$el);
+  },
+
+  // Dismantle the PointerTracker when removed
+  beforeDestroy: function() {
+    this.pointerInstance = null;
+  }
+}
+
+// CHANGE
+// We get our pointer events from our mixin now, which means we
+// can remove that functionality from our component, and just reference
+// the mixin.
+var PointerCanvas = Vue.extend({
+
+  // Mixin reference
+  mixins: [pointerEventMixin],
+
+  // This is the template reference
+  template: '#pointer-canvas-template',  
+
+  // This pushes events to the parent's log
+  // See also: the pointer-demo component
+  methods: {
+    handlePointerMove: function (ev) {
+      this.$parent.$data.eventLog.push(ev);
+    }
+  }
+});
+
+// This is the component where we log Pointer events
+var PointerLog = Vue.extend({
+
+  // This is the template reference
+  template: '#pointer-log-template',
+
+  // Get the list of logged events from the parent
+  // See also: the pointer-demo component
+  computed: {
+    eventLog: function() {
+      return this.$parent.$data.eventLog;
+    }
+  }
+});
+
+// This is the component where we pair a source and a log
+Vue.component('pointer-demo', {
+  
+  // This is the template reference
+  template: '#pointer-demo-template',
+
+  // One big reason we have a wrapper component (this one) is so
+  // the child components have access to a shared data source. 
+  //
+  // If we placed it in the root Vue instance, events from any source 
+  // would either trample each other, or all log in one long list.
+  // 
+  // If we kept it in the log component, we'd have to tightly couple
+  // the logic of a source component with the log. That sibling-level
+  // communication is a bad idea.
+  //
+  // We are basically standing in for vuex here, in lieu of adding
+  // more dependencies to this demo
+  data: function() {
+    return {
+      eventLog: [],
+    }
+  },
+
+  // References to our components
+  components: {
+    'pointer-canvas': PointerCanvas,
+    'pointer-log': PointerLog
+  }
+});
+
+// Kick off the app!
+var demoApp = new Vue({
+  el: '#app'
+})
+</script>
+
+</html>

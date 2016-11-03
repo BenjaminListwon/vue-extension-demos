@@ -1,6 +1,8 @@
 /* General stuff for the page layout */
 body {
   font-family: 'Muli', helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 .row {
   display: flex;
@@ -10,27 +12,29 @@ body {
 }
 .col {
   padding: 0 1rem;
-  flex: 1 1 auto;
+  width: calc(50% - 2rem);
+  flex: 0 0 auto;
 }
 
 /* For the header */
-body > header {
+header {
   text-align: center;
-  padding-bottom: 2rem;
+  padding: 1rem;
+  margin-bottpm: 1rem;
 }
-body > header h1,
-body > header h2 {
+header h1,
+header h2 {
   margin: 0.25rem 0;
 }
-body > header ol {
+header ol {
   list-style: none;
 }
-body > header ol li {
+header ol li {
   display: inline-block;
   padding: 0 0.5rem;
   border-right: 1px dotted #ccc;
 }
-body > header ol li:last-child {
+header ol li:last-child {
   border-right: none;
 }
 
@@ -45,6 +49,9 @@ body > header ol li:last-child {
 .event-source {
   display: table;
 }
+.event-source.over {
+  background: #ffc;
+}
 .event-source p {
   display: table-cell;
   vertical-align: middle;
@@ -52,10 +59,34 @@ body > header ol li:last-child {
 }
 .event-log {
   overflow: auto;
-  font-family: monospace;
 }
 .event-log ul {
+  font-family: monospace;
   list-style: none;
   margin: 10px;
   padding: 0;
+}
+p {
+  text-align: center;
+}
+
+/* Surprise! */
+header.rainbow {
+  /* IE10+ */ 
+  background-image: -ms-linear-gradient(left, rgba(255,0,0,0.1) 0%, rgba(255,255,0,0.1) 25%, rgba(5,193,255,0.1) 50%, rgba(255,255,0,0.1) 75%, rgba(255,0,0,0.1) 100%);
+
+  /* Mozilla Firefox */ 
+  background-image: -moz-linear-gradient(left, rgba(255,0,0,0.1) 0%, rgba(255,255,0,0.1) 25%, rgba(5,193,255,0.1) 50%, rgba(255,255,0,0.1) 75%, rgba(255,0,0,0.1) 100%);
+
+  /* Opera */ 
+  background-image: -o-linear-gradient(left, rgba(255,0,0,0.1) 0%, rgba(255,255,0,0.1) 25%, rgba(5,193,255,0.1) 50%, rgba(255,255,0,0.1) 75%, rgba(255,0,0,0.1) 100%);
+
+  /* Webkit (Safari/Chrome 10) */ 
+  background-image: -webkit-gradient(linear, left top, right top, color-stop(0, rgba(255,0,0,0.1)), color-stop(25, rgba(255,255,0,0.1)), color-stop(50, rgba(5,193,255,0.1)), color-stop(75, rgba(255,255,0,0.1)), color-stop(100, rgba(255,0,0,0.1)));
+
+  /* Webkit (Chrome 11+) */ 
+  background-image: -webkit-linear-gradient(left, rgba(255,0,0,0.1) 0%, rgba(255,255,0,0.1) 25%, rgba(5,193,255,0.1) 50%, rgba(255,255,0,0.1) 75%, rgba(255,0,0,0.1) 100%);
+
+  /* W3C Markup */ 
+  background-image: linear-gradient(to right, rgba(255,0,0,0.1) 0%, rgba(255,255,0,0.1) 25%, rgba(5,193,255,0.1) 50%, rgba(255,255,0,0.1) 75%, rgba(255,0,0,0.1) 100%);
 }

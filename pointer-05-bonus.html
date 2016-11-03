@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bonus Demo - Showing Off Our Plugin - Strategies for Extending Vue</title>
+  <link href="https://fonts.googleapis.com/css?family=Muli:300,400" rel="stylesheet">
+  <link rel="stylesheet" href="pointer-style.css">
+  <script type="text/javascript" src="pointer.min.js"></script>
+  <script type="text/javascript" src="vue.js"></script>
+  <script type="text/javascript" src="vue-pointer.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <pointer-header></pointer-header>
+    <div class="row">
+      <div class="col">
+        <pointer-demo></pointer-demo>
+      </div>
+      <div class="col">
+        <pointer-demo></pointer-demo>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script type="text/x-template" id="pointer-demo-template">
+  <div>
+    <pointer-canvas></pointer-canvas>
+    <pointer-log></pointer-log>
+  </div>
+</script>
+
+<script type="text/x-template" id="pointer-canvas-template">
+  <div class="event-source" 
+    :class="{ over: isOver }" 
+    v-pointer:pointermove="handlePointerMove" 
+    v-pointer:pointerenter="handlePointerEnter"
+    v-pointer:pointerleave="handlePointerLeave"
+    >
+    <p v-if="hasLog">Now try exiting and re-entering this DIV.</p>
+    <p v-else>Click and drag in here.</p>
+  </div>
+</script>
+
+<script type="text/x-template" id="pointer-log-template">
+  <div>
+    <div class="event-log"
+      v-on:click="clearLog"
+      >
+      <ul>
+        <li v-for="event in eventLog">{{ event }}</li>
+      </ul>
+    </div>
+    <p v-show="hasLog">(You can also click the log div to clear)</p>
+  </div>
+</script>
+
+<script type="text/x-template" id="pointer-header-template">
+  <header 
+    :class="{ rainbow: isOver }" 
+    v-pointer:pointerenter="handlePointerEnter" 
+    v-pointer:pointerleave="handlePointerLeave"
+    >
+    <h1>Strategies for Extending Vue</h1>
+    <h2>Bonus Demo: Showing Off Our Plugin</h2>
+    <nav>
+      <ol>
+        <li><a href="pointer-01-basic.html">Basic</a></li>
+        <li><a href="pointer-02-mixin.html">Mixin</a></li>
+        <li><a href="pointer-03-extension.html">Extend</a></li>
+        <li><a href="pointer-04-plugin.html">Plugin</a></li>
+        <li><a href="pointer-05-bonus.html">Bonus Demo</a></li>
+        <li><a href="https://benjaminlistwon.com/strategies-for-extending-vue/">Read the article</a></li>
+      </ol>
+    </nav>
+  </header>
+</script>
+
+
+<script>
+var PointerCanvas = Vue.extend({
+  template: '#pointer-canvas-template',
+  data: function() {
+    return {
+      isOver: false
+    }
+  },
+  computed: {
+    hasLog: function() {
+      return this.$parent.hasLog;
+    }
+  },
+  methods: {
+    handlePointerMove: function (ev) {
+      this.$parent.$data.eventLog.push(ev);
+    },
+    handlePointerEnter: function() {
+      this.isOver = true;
+      this.clearLog();
+    },
+    handlePointerLeave: function() {
+      this.isOver = false;
+    },
+    clearLog: function() {
+      this.$parent.clearLog();
+    }
+  }
+});
+
+var PointerLog = Vue.extend({
+  template: '#pointer-log-template',
+  computed: {
+    eventLog: function() {
+      return this.$parent.$data.eventLog;
+    },
+    hasLog: function() {
+      return this.$parent.hasLog;
+    }
+  },
+  methods: {
+    clearLog: function() {
+      this.$parent.clearLog();
+    }
+  }
+});
+
+Vue.component('pointer-demo', {
+  template: '#pointer-demo-template',
+  data: function() {
+    return {
+      eventLog: [],
+    }
+  },
+  components: {
+    'pointer-canvas': PointerCanvas,
+    'pointer-log': PointerLog
+  },
+  methods: {
+    clearLog: function() {
+      this.eventLog = [];
+    }
+  },
+  computed: {
+    hasLog: function() {
+      return this.eventLog.length ? true : false;
+    }
+  }
+});
+
+Vue.component('pointer-header', {
+  template: '#pointer-header-template',
+  data: function() {
+    return {
+      isOver: false
+    }
+  },
+  methods: {
+    handlePointerEnter: function() {
+      this.isOver = true;
+    },
+    handlePointerLeave: function() {
+      this.isOver = false;
+    }
+  }
+});
+
+var demoApp = new Vue({
+  el: '#app'
+})
+</script>
+
+</html>
