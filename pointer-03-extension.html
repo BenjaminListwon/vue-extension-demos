@@ -90,7 +90,15 @@
 // CHANGE 
 // Define our pointer events "base class"
 var PointerBase = Vue.extend({
-  // When the DIV gets added to the DOM, start tracking events
+  
+  // Retain an instance of PointerTracker
+  data: function() {
+    return {
+      pointerInstance: null
+    }
+  },
+
+  // When the component gets added to the DOM, start tracking events
   mounted: function() {
     this.pointerInstance = new PointerTracker(this.$el);
   },

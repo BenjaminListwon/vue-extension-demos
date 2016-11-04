@@ -26,7 +26,7 @@
         // If there is no pointer tracker instance on this element
         // yet, go ahead and init one
         if (!el.pointerTracker) {
-          el.pointerTracker = new PointerTracker(el)
+          el.pointerTracker = new PointerTracker(el);
         }
 
         // Should we use event capture
@@ -35,8 +35,8 @@
         // See what event we care about listening to
         var event = binding.arg
         if (!event) {
-          console.warn('[vue-pointer] event type argument is required.')
-          return
+          console.warn('[vue-pointer] event type argument is required.');
+          return;
         }
 
         // See if the event is a valid one to listen to, then bind it,
@@ -46,9 +46,9 @@
         // in later lifecycle steps as necessary
         for (var i = 0; i < pointerEvents.length; i++) {
           if (event.indexOf(pointerEvents[i]) === 0) {
-            el.addEventListener(event, binding.value, useCapture)
-            el.event = binding.value
-            break
+            el.addEventListener(event, binding.value, useCapture);
+            el.event = binding.value;
+            break;
           }
         }
       },
@@ -60,14 +60,14 @@
 
         // Remove our old func, if one exists
         if (el.event) {
-          el.removeEventListener(event, el.event, useCapture)
+          el.removeEventListener(event, el.event, useCapture);
         }
 
         // See what event we care about listening to
         var event = binding.arg
         if (!event) {
-          console.warn('[vue-pointer] event type argument is required.')
-          return
+          console.warn('[vue-pointer] event type argument is required.');
+          return;
         }
 
         // See if the event is a valid one to listen to, then bind it,
@@ -77,9 +77,9 @@
         // in later lifecycle steps as necessary
         for (var i = 0; i < pointerEvents.length; i++) {
           if (event.indexOf(pointerEvents[i]) === 0) {
-            el.addEventListener(event, binding.value, useCapture)
-            el.event = binding.value
-            break
+            el.addEventListener(event, binding.value, useCapture);
+            el.event = binding.value;
+            break;
           }
         }
       },
@@ -91,11 +91,11 @@
 
         // Remove our old func, if one exists
         if (el.event) {
-          el.removeEventListener(event, el.event, useCapture)
+          el.removeEventListener(event, el.event, useCapture);
         }
 
         // Tear down our capture instance
-        el.pointerTracker = null
+        el.pointerTracker = null;
       }
     })
 
@@ -105,12 +105,12 @@
    * Add our plugin to the global instance
    */
   if (typeof exports == "object") {
-    module.exports = vuePointer
+    module.exports = vuePointer;
   } else if (typeof define == "function" && define.amd) {
-    define([], function(){ return vuePointer })
+    define([], function(){ return vuePointer });
   } else if (window.Vue) {
-    window.vuePointer = vuePointer
-    Vue.use(vuePointer)
+    window.vuePointer = vuePointer;
+    Vue.use(vuePointer);
   }
 
 })()
